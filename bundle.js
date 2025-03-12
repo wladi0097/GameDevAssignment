@@ -23386,70 +23386,10 @@ class AceOfShadows extends SubPageBase {
     }
 }
 
-var MagicWoredsMock = {
-    "dialogue": [
-        { "name": "Sheldon", "text": "I admit {satisfied} the design of Cookie Crush is quite elegant in its simplicity." },
-        { "name": "Leonard", "text": "That’s practically a compliment, Sheldon. {intrigued} Are you feeling okay?" },
-        { "name": "Penny", "text": "Don’t worry, Leonard. He’s probably just trying to justify playing it himself." },
-        { "name": "Sheldon", "text": "Incorrect. {neutral} I’m studying its mechanics. The progression system is oddly satisfying." },
-        { "name": "Penny", "text": "It’s called fun, Sheldon. You should try it more often." },
-        { "name": "Leonard", "text": "She’s got a point. Sometimes, a simple game can be relaxing." },
-        { "name": "Neighbour", "text": "I fully agree {affirmative}" },
-        { "name": "Sheldon", "text": "Relaxing? I suppose there’s merit in low-stakes gameplay to reduce cortisol levels." },
-        { "name": "Penny", "text": "Translation: Sheldon likes crushing cookies but won’t admit it. {laughing}" },
-        { "name": "Sheldon", "text": "Fine. I find the color-matching oddly soothing. Happy?" },
-        { "name": "Leonard", "text": "Very. Now we can finally play as a team in Wordscapes." },
-        { "name": "Penny", "text": "Wait, Sheldon’s doing team games now? What’s next, co-op decorating?" },
-        { "name": "Sheldon", "text": "Unlikely. But if the design involves symmetry and efficiency, I may consider it." },
-        { "name": "Penny", "text": "See? Casual gaming brings people together!" },
-        { "name": "Leonard", "text": "Even Sheldon. That’s a win for everyone. {win}" },
-        { "name": "Sheldon", "text": "Agreed. {neutral} Though I still maintain chess simulators are superior." },
-        { "name": "Penny", "text": "Sure, Sheldon. {intrigued} You can play chess *after* we beat this next level." }
-    ],
-    "emojies": [
-        {
-            "name": "sad",
-            "url": "https://api.dicebear.com:81/9.x/fun-emoji/png?seed=Sad"
-        },
-        {
-            "name": "intrigued",
-            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Sawyer"
-        },
-        {
-            "name": "neutral",
-            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Destiny"
-        },
-        {
-            "name": "satisfied",
-            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Jocelyn"
-        },
-        {
-            "name": "laughing",
-            "url": "https://api.dicebear.com/9.x/fun-emoji/png?seed=Sophia"
-        }
-    ],
-    "avatars": [
-        {
-            "name": "Sheldon",
-            "url": "https://api.dicebear.com/9.x/personas/png?body=squared&clothingColor=6dbb58&eyes=open&hair=buzzcut&hairColor=6c4545&mouth=smirk&nose=smallRound&skinColor=e5a07e",
-            "position": "left"
-        },
-        {
-            "name": "Penny",
-            "url": "https://api.dicebear.com/9.x/personas/png?body=squared&clothingColor=f55d81&eyes=happy&hair=extraLong&hairColor=f29c65&mouth=smile&nose=smallRound&skinColor=e5a07e",
-            "position": "right"
-        },
-        {
-            "name": "Leonard",
-            "url": "https://api.dicebear.com/9.x/personas/png?body=checkered&clothingColor=f3b63a&eyes=glasses&hair=shortCombover&hairColor=362c47&mouth=surprise&nose=mediumRound&skinColor=d78774",
-            "position": "right"
-        }
-    ]
-};
-
 class MagicWords extends SubPageBase {
     constructor() {
         super(...arguments);
+        this.apiURL = 'https://private-624120-softgamesassignment.apiary-mock.com/v2/magicwords';
         this.conversationResult = { dialogue: [], emojies: [], avatars: [] };
         this.nextButton = null;
         this.previousButton = null;
@@ -23460,12 +23400,15 @@ class MagicWords extends SubPageBase {
         this.currentConversationIndex = 0;
     }
     render() {
-        this.renderSpeechBubble('Loading...');
+        this.renderSpeechBubble();
+        this.renderTextWithEmoji('Loading ...');
         this.fetchConversation()
             .then(() => this.fetchAssets)
-            .then(() => this.startConversation(0))
-            .then(() => this.renderButtons())
-            .then(() => this.resize());
+            .then(() => {
+            this.startConversation(0);
+            this.renderButtons();
+            this.resize();
+        });
     }
     resize() {
         var _a, _b, _c;
@@ -23473,20 +23416,20 @@ class MagicWords extends SubPageBase {
         (_b = this.previousButton) === null || _b === void 0 ? void 0 : _b.position.set(10, this.app.screen.height / 2 + 160);
         const avatarWidth = this.app.screen.width * 0.2;
         (_c = this.avatar) === null || _c === void 0 ? void 0 : _c.position.set(this.speechAlignLeft ? avatarWidth / 2 : this.app.screen.width - avatarWidth / 2, this.app.screen.height / 2);
-        if (this.speechBubble && this.speechText) {
+        if (this.speechBubble) {
             this.speechBubble.clear();
             this.speechBubble.beginFill('#fff');
             this.speechBubble.lineStyle(2, 0x000000);
             this.speechBubble.position.set(this.speechAlignLeft ? avatarWidth + 20 : 20, this.app.screen.height / 2 - 100);
             this.speechBubble.drawRoundedRect(0, 0, this.app.screen.width - avatarWidth - 40, 200, 10);
-            this.speechText.style.wordWrapWidth = this.app.screen.width - avatarWidth - 60;
         }
     }
     fetchConversation() {
         return __awaiter(this, void 0, void 0, function* () {
-            return new Promise(resolve => {
-                this.conversationResult = MagicWoredsMock;
-                resolve();
+            return fetch(this.apiURL)
+                .then(res => res.json())
+                .then(data => {
+                this.conversationResult = data;
             });
         });
     }
@@ -23504,10 +23447,8 @@ class MagicWords extends SubPageBase {
             return;
         }
         this.speechAlignLeft = avatar.position === 'left';
-        if (this.speechText) {
-            this.speechText.text = dialogue.text;
-        }
         this.renderAvatar(avatar.url);
+        this.renderTextWithEmoji(dialogue.text);
         this.resize();
     }
     renderButtons() {
@@ -23551,18 +23492,46 @@ class MagicWords extends SubPageBase {
         this.container.addChild(avatar);
         this.avatar = avatar;
     }
-    renderSpeechBubble(text) {
+    renderSpeechBubble() {
         const speechBubble = new Graphics();
         this.container.addChild(speechBubble);
-        const speechText = new Text(text, {
-            fill: '#000',
-            fontSize: 20,
-            wordWrap: true,
-        });
-        speechText.position.set(10, 10);
-        speechBubble.addChild(speechText);
         this.speechBubble = speechBubble;
-        this.speechText = speechText;
+    }
+    renderTextWithEmoji(text) {
+        var _a, _b, _c;
+        (_a = this.speechText) === null || _a === void 0 ? void 0 : _a.destroy();
+        (_b = this.speechBubble) === null || _b === void 0 ? void 0 : _b.removeChildren();
+        const container = new Container();
+        let currentX = 0;
+        const emojiSize = 24;
+        const parts = text.split(/(\{.*?\})/g);
+        for (const part of parts) {
+            if (part.startsWith('{') && part.endsWith('}')) {
+                const emojiName = part.slice(1, -1);
+                const emoji = this.conversationResult.emojies.find(e => e.name === emojiName);
+                if (emoji) {
+                    const sprite = Sprite.from(emoji.url);
+                    sprite.width = emojiSize;
+                    sprite.height = emojiSize;
+                    sprite.position.set(currentX, 0);
+                    container.addChild(sprite);
+                    currentX += emojiSize + 4;
+                }
+            }
+            else {
+                const textPart = new Text(part, {
+                    fill: '#000',
+                    fontSize: 20,
+                    wordWrap: true,
+                    wordWrapWidth: this.app.screen.width * 0.6,
+                });
+                textPart.position.set(currentX, 0);
+                container.addChild(textPart);
+                currentX += textPart.width;
+            }
+        }
+        container.position.set(10, 10);
+        (_c = this.speechBubble) === null || _c === void 0 ? void 0 : _c.addChild(container);
     }
 }
 
