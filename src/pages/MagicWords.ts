@@ -22,6 +22,7 @@ export class MagicWords extends SubPageBase {
     render(): void {
         this.renderSpeechBubble();
         this.renderTextWithEmoji('Loading ...');
+        this.resize();
 
         this.fetchConversation()
             .then(() => this.fetchAssets)
