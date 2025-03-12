@@ -8,6 +8,7 @@ export class AceOfShadows extends SubPageBase {
     private ticker: Ticker | null = null;
     private isMoving: boolean = false;
     private fromLeftToRight: boolean = true;
+    private animationRunning: boolean = false;
 
     render(): void {
         this.leftStack = new Container();
@@ -22,6 +23,7 @@ export class AceOfShadows extends SubPageBase {
             this.leftStack.addChild(card);
         }
 
+        this.animationRunning = true;
         this.resize()
         this.ticker = new Ticker();
         this.ticker.add(() => this.moveTopCard());
@@ -63,6 +65,8 @@ export class AceOfShadows extends SubPageBase {
         const startTime = performance.now();
 
         const animate = () => {
+            if (!this.animationRunning) return;
+
             const now = performance.now();
             const progress = Math.min((now - startTime) / duration, 1);
 
@@ -89,6 +93,7 @@ export class AceOfShadows extends SubPageBase {
     }
 
     public destroy(): void {
+        this.animationRunning = false;
         this.ticker?.stop();
         super.destroy();
     }
