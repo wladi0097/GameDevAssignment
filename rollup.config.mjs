@@ -6,6 +6,7 @@ import nodePolyfills from 'rollup-plugin-node-polyfills';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload'
 import copy from "rollup-plugin-copy";
+import terser from '@rollup/plugin-terser';
 
 const IS_WATCHED = process.env.ROLLUP_WATCH
 
@@ -31,5 +32,6 @@ export default {
         }),
         IS_WATCHED && livereload(),
         IS_WATCHED && serve({open: true, contentBase: 'dist'}),
+        !IS_WATCHED && terser()
     ]
 };

@@ -8,16 +8,16 @@ export class PhoenixFlame extends SubPageBase {
     private animationRunning: boolean = false;
 
     render(): void {
-        this.createContainer()
+        this.createContainer();
         for (let i = 0; i < 10; i++) {
-            this.addFlame()
+            this.addFlame();
         }
 
 
         this.app.ticker.add(() => {
             this.animate();
         });
-        this.animationRunning = true
+        this.animationRunning = true;
     }
 
     private createContainer(): void {
@@ -51,7 +51,7 @@ export class PhoenixFlame extends SubPageBase {
             flame.alpha -= 0.01;
 
             const tintPhase = Math.sin(Date.now() * 0.001 + index * 0.1) * 0.5 + 0.5;
-            flame.tint = `#ff${Math.floor(0x66 * tintPhase + 0x00 * (1 - tintPhase)).toString(16).padStart(2, '0')}00`;
+            flame.tint = `#ff${Math.floor(0x66 * tintPhase).toString(16).padStart(2, '0')}00`; // orange tints
 
             flame.scale.x = flame.scale.y = 0.5 + Math.sin(Date.now() * 0.002 + index * 0.1) * 0.4;
 
@@ -66,8 +66,8 @@ export class PhoenixFlame extends SubPageBase {
     destroy() {
         this.animationRunning = false;
         super.destroy();
-        this.fireContainer?.destroy()
+        this.fireContainer?.destroy();
     }
 
-    resize(): void {}
+    resize(): void {} // flames respawn all the time so no need
 }

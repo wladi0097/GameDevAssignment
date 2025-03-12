@@ -24,7 +24,7 @@ export class AceOfShadows extends SubPageBase {
         }
 
         this.animationRunning = true;
-        this.resize()
+        this.resize();
         this.ticker = new Ticker();
         this.ticker.add(() => this.moveTopCard());
         this.ticker.start();

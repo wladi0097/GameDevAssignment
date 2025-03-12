@@ -15,18 +15,18 @@ export class MainMenu extends PageBase {
         this.container.addChild(this.logo);
 
         subPages.forEach(subPage => {
-            const button: Button = new Button(subPage.title)
-            button.onClick(() => this.appManager.changePage(subPage.component))
-            this.buttons.push(button)
+            const button: Button = new Button(subPage.title);
+            button.onClick(() => this.appManager.changePage(subPage.component));
+            this.buttons.push(button);
             this.container.addChild(button);
         })
 
-        this.wladiImage = Sprite.from(OwnAssets.wladi)
+        this.wladiImage = Sprite.from(OwnAssets.wladi);
         this.wladiImage.anchor.set(0.5);
         this.wladiImage.scale.set(0.7);
         this.container.addChild(this.wladiImage);
 
-        this.resize()
+        this.resize();
     }
 
     resize(): void {

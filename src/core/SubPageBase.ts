@@ -9,9 +9,9 @@ export abstract class SubPageBase extends PageBase {
     }
 
     private renderBackButton(): void {
-        const button: Button = new Button("Back to Menu")
+        const button: Button = new Button("Back to Menu");
         button.position.set(10, 10);
-        button.onClick(() => this.appManager.changeToMainMenu())
+        button.onClick(() => this.appManager.changeToMainMenu());
         this.container.addChild(button);
     }
 }

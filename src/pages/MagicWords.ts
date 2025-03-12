@@ -10,7 +10,7 @@ type ConversationDefinition = {
 
 export class MagicWords extends SubPageBase {
     private apiURL: string = 'https://private-624120-softgamesassignment.apiary-mock.com/v2/magicwords';
-    private conversationResult: ConversationDefinition = {dialogue: [], emojies: [], avatars: []}
+    private conversationResult: ConversationDefinition = {dialogue: [], emojies: [], avatars: []};
     private nextButton: Button | null = null;
     private previousButton: Button | null = null;
     private speechBubble: Graphics | null = null;
@@ -29,7 +29,7 @@ export class MagicWords extends SubPageBase {
                 this.startConversation(0)
                 this.renderButtons()
                 this.resize()
-            })
+            });
     }
 
     resize(): void {
@@ -40,7 +40,7 @@ export class MagicWords extends SubPageBase {
         this.avatar?.position.set(this.speechAlignLeft ? avatarWidth / 2 : this.app.screen.width - avatarWidth / 2, this.app.screen.height / 2);
 
         if (this.speechBubble) {
-            this.speechBubble.clear()
+            this.speechBubble.clear();
             this.speechBubble.beginFill('#fff');
             this.speechBubble.lineStyle(2, 0x000000);
             this.speechBubble.position.set(this.speechAlignLeft ? avatarWidth + 20 : 20, this.app.screen.height / 2 - 100);
@@ -59,25 +59,25 @@ export class MagicWords extends SubPageBase {
     private async fetchAssets(): Promise<void> {
         const avatars: string[] = this.conversationResult.avatars.map(item => item.url);
         const emojis: string[] = this.conversationResult.emojies.map(item => item.url);
-        return Assets.load([...avatars, ...emojis]).then()
+        return Assets.load([...avatars, ...emojis]).then();
     }
 
     private startConversation(fromIndex: number = 0): void {
-        const dialogue = this.conversationResult.dialogue[fromIndex]
+        const dialogue = this.conversationResult.dialogue[fromIndex];
         const avatar = this.conversationResult.avatars.find(a => a.name === dialogue.name);
         if (!avatar) {return}
 
         this.speechAlignLeft = avatar.position === 'left';
 
-        this.renderAvatar(avatar.url)
-        this.renderTextWithEmoji(dialogue.text)
-        this.resize()
+        this.renderAvatar(avatar.url);
+        this.renderTextWithEmoji(dialogue.text);
+        this.resize();
     }
 
     private renderButtons(): void {
         this.nextButton = new Button("Next");
         this.container.addChild(this.nextButton);
-        this.nextButton.onClick(() => this.nextDialog())
+        this.nextButton.onClick(() => this.nextDialog());
 
         this.previousButton = new Button("Previous");
         this.previousButton.visible = false;
@@ -87,24 +87,24 @@ export class MagicWords extends SubPageBase {
 
     private nextDialog(): void {
         if (!this.previousButton || !this.nextButton) {return}
-        this.currentConversationIndex += 1
+        this.currentConversationIndex += 1;
 
         this.previousButton.visible = true;
         if (this.currentConversationIndex == this.conversationResult.dialogue.length - 1) {
             this.nextButton.visible = false;
         }
-        this.startConversation(this.currentConversationIndex)
+        this.startConversation(this.currentConversationIndex);
     }
 
     private previousDialog(): void {
         if (!this.previousButton || !this.nextButton) {return}
-        this.currentConversationIndex -= 1
+        this.currentConversationIndex -= 1;
 
         this.nextButton.visible = true;
         if (this.currentConversationIndex == 0) {
             this.previousButton.visible = false;
         }
-        this.startConversation(this.currentConversationIndex)
+        this.startConversation(this.currentConversationIndex);
     }
 
     private renderAvatar(url: string): void {

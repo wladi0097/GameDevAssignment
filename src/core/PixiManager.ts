@@ -15,16 +15,16 @@ export class PixiManager {
         });
 
         this.loadRequiredAssets().then(() => {
-            this.injectStyle()
-            this.injectApp()
-            this.injectFPSCounter()
-            this.injectAnimatedBackground()
-            this.subscribeToWindowEvents()
+            this.injectStyle();
+            this.injectApp();
+            this.injectFPSCounter();
+            this.injectAnimatedBackground();
+            this.subscribeToWindowEvents();
         });
     }
 
     private async loadRequiredAssets(): Promise<void> {
-        return Assets.load(Object.values(OwnAssets)).then()
+        return Assets.load(Object.values(OwnAssets)).then();
     }
 
     private injectStyle(): void {
@@ -34,7 +34,7 @@ export class PixiManager {
             padding: 0;
             overflow: hidden;
         }
-        `
+        `;
 
         const style: HTMLStyleElement = document.createElement('style');
         style.textContent = cssText;
